@@ -6,13 +6,11 @@ const dbUrl = firebaseConfig.databaseURL;
 
 const getCurrentUsersUid = () => firebase.auth().currentUser?.uid;
 
-const getUserByUid = (uid) => new Promise((resolve, reject) => {
+const getUserByUid = (user) => new Promise((resolve, reject) => {
   // TODO: Get single user ingo based on uid
-  axios.get(`${dbUrl}/users.json?orderBy="uid"&equalTo="${uid}"`)
-    .then(() => {
-      const currentUserInfo = { uid };
-      resolve(currentUserInfo);
-    }).catch((error) => reject(error));
+  axios.get(`${dbUrl}/users.json?orderBy="uid"&equalTo="${user.uid}"`)
+    .then((response) => resolve(response))
+    .catch((error) => reject(error));
 });
 
 export {
