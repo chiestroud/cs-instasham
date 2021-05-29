@@ -3,7 +3,7 @@ import firebase from 'firebase';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { AppNavbar } from '../components/instasham-design-system';
 import './App.scss';
-import { getUserByUid } from '../helpers/userHelper';
+import { addUser, getUserByUid } from '../helpers/userHelper';
 import Routes from '../helpers/Routes';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
         setUser(userInfoObj);
         getUserByUid(userInfoObj).then((response) => {
           if (Object.values(response.data).length === 0) {
-            console.warn('user needs to be added');
+            addUser(userInfoObj);
           } else if (user || user === null) {
             setUser(false);
           }
@@ -33,7 +33,7 @@ function App() {
 
   return (
     <Router>
-      <AppNavbar userInfo={{ ...user }} />
+      <AppNavbar userInfo={{ user }} user={user} />
       <div className='app-container'>
         <Routes
           user={user}

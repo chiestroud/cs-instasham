@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UsersList } from '../components/instasham-design-system';
-import USERJSON from '../sample_json/users.json';
+import { getUsers } from '../helpers/userHelper';
 
 export default function Browse() {
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    getUsers().then((data) => setUserList(data));
+  }, []);
+
   return (
     <div>
       <h2>UserList</h2>
-      <UsersList userList={Object.values(USERJSON)} />
+      {userList.map((users) => (
+        <div key={users.firebaseKey}>
+          <UsersList userList={userList} />
+        </div>
+      ))}
     </div>
   );
 }

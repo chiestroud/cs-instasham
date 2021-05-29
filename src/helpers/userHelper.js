@@ -13,9 +13,31 @@ const getUserByUid = (user) => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
+const getUsers = () => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/users.json`)
+    .then((response) => {
+      if (response.data) {
+        resolve(Object.values(response.data));
+      } else {
+        resolve([]);
+      }
+    }).catch((error) => reject(error));
+});
+
+const addUser = (user) => new Promise((resolve, reject) => {
+  axios.post(`${dbUrl}/users.json`, user)
+    .then((response) => {
+      const body = { firebaseKey: response.data.name };
+      axios.patch(`${dbUrl}/users/${response.data.name}.json`, body)
+        .then(() => getUsers().then((usersArray) => resolve(usersArray)));
+    }).catch((err) => reject(err));
+});
+
 export {
   getUserByUid,
-  getCurrentUsersUid
+  getCurrentUsersUid,
+  getUsers,
+  addUser
 };
 
 // import firebase from 'firebase';
